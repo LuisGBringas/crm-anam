@@ -6,7 +6,8 @@
   "scripts": {
     "import-osm": "tsx import-osm.ts",
     "import-cosisi": "tsx import-cosisi.ts",
-    "import-erni-fallas": "tsx import-erni-fallas.ts"
+    "import-erni-fallas": "tsx import-erni-fallas.ts",
+    "update-val-hs": "tsx update-val-hs.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
