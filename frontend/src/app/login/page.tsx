@@ -16,7 +16,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && session) {
-      router.replace("/mapa");
+      router.replace("/");
     }
   }, [loading, session, router]);
 
@@ -37,7 +37,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.replace("/mapa");
+    router.replace("/");
   }
 
   return (

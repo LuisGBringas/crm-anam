@@ -7,6 +7,7 @@ import { useState } from "react";
 import {
   ChevronLeft,
   FilePlus2,
+  LayoutDashboard,
   List,
   LogOut,
   Map as MapIcon,
@@ -17,6 +18,7 @@ import {
 import { useAuth, useRequireAuth } from "./AuthProvider";
 
 const NAV_ITEMS = [
+  { href: "/", label: "Dashboard", Icon: LayoutDashboard },
   { href: "/mapa", label: "Mapa", Icon: MapIcon },
   { href: "/unidades", label: "Lista de unidades", Icon: List },
   { href: "/unidades/nueva", label: "Nueva unidad", Icon: FilePlus2 },
