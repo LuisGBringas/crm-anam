@@ -57,3 +57,10 @@ export const TICKET_ORIGEN_LIST: TicketOrigen[] = [
   "erni_semar",
   "manual",
 ];
+
+export const CATEGORY_LABELS: Record<string, string> = {
+  ups: "UPS",
+  planta_emergencia: "Planta de emergencia",
+  aire_acondicionado: "Aire acondicionado",
+  otro: "Otro",
+};
