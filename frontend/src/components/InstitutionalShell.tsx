@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 
 export function InstitutionalShell({ children }: { children: React.ReactNode }) {
@@ -85,15 +84,6 @@ export function InstitutionalShell({ children }: { children: React.ReactNode }) 
             <a href="https://www.gob.mx/busqueda" target="_blank" rel="noreferrer">
               Buscar
             </a>
-            <Link href="/mapa" onClick={() => setMobileMenuOpen(false)}>
-              Mapa
-            </Link>
-            <Link href="/unidades" onClick={() => setMobileMenuOpen(false)}>
-              Unidades
-            </Link>
-            <Link href="/tickets" onClick={() => setMobileMenuOpen(false)}>
-              Tickets
-            </Link>
             <a href="https://www.gob.mx" target="_blank" rel="noreferrer">
               Portal gob.mx
             </a>

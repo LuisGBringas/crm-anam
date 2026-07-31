@@ -136,10 +136,12 @@ body {
 .snd-institutional .snd-mexico-mobile-panel__content {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-  background: rgb(97 18 50 / 97%);
+  background: #611232;
+  isolation: isolate;
+  transform: translateZ(0);
   color: #fff;
   padding: 1rem;
   box-shadow: 0 12px 40px rgb(0 0 0 / 35%);
@@ -386,26 +388,9 @@ body {
   justify-content: center;
 }
 
-.snd-app-shell .menuMain__item--mas {
-  display: none;
-}
-
-.snd-app-shell .menuMovil {
-  display: none;
-}
-
 .snd-app-shell .oculto {
   position: absolute;
   left: -9999px;
-}
-
-.snd-app-shell .hr {
-  border: none;
-  border-top: 1px solid rgb(255 255 255 / 25%);
-}
-
-.snd-app-shell .my--10 {
-  margin: 10px 0;
 }
 
 @media (max-width: 767.9px) {
@@ -445,81 +430,6 @@ body {
     width: auto;
   }
 
-  .snd-app-shell .menuMain__item--mas {
-    display: block;
-  }
-
-  .snd-app-shell .menuMovil {
-    display: block;
-    position: fixed;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    width: min(85vw, 320px);
-    background: linear-gradient(180deg, #7a203f 0%, #611232 100%);
-    color: #fff;
-    padding: 14px 14px 18px;
-    transform: translateX(100%);
-    transition: transform 0.2s ease;
-    z-index: 40;
-    overflow-y: auto;
-  }
-
-  .snd-app-shell .menuMovil--abierto {
-    transform: translateX(0);
-  }
-
-  .snd-app-shell .menuMovil__gatilloTop {
-    border: 0;
-    background: transparent;
-    color: #fff;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  .snd-app-shell .menuMovil__gatilloTop img,
-  .snd-app-shell .ico--blanco--24 {
-    width: 22px;
-    height: 22px;
-  }
-
-  .snd-app-shell .menuMovil__tit {
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .snd-app-shell .menuMovil__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .snd-app-shell .menuMovil__link {
-    width: 100%;
-    border: 0;
-    background: transparent;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    min-height: 40px;
-    padding: 8px 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .snd-app-shell .menuMovil__link:hover {
-    background: rgb(255 255 255 / 14%);
-  }
 }
 
 @media (max-width: 640px) {

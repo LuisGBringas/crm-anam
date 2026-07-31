@@ -3,17 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ChevronLeft,
   FilePlus2,
   List,
   LogOut,
   Map as MapIcon,
-  MoreHorizontal,
   PlusCircle,
   Ticket,
-  X,
   Zap,
 } from "lucide-react";
 import { useAuth, useRequireAuth } from "./AuthProvider";
@@ -32,11 +30,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
-  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
-
-  useEffect(() => {
-    setMobileMoreOpen(false);
-  }, [pathname]);
 
   if (loading || !session) {
     return (
@@ -131,44 +124,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </li>
               );
             })}
-            <li className="menuMain__item menuMain__item--mas">
-              <button
-                className="menuMain__link"
-                id="menuMovil__gatillo"
-                aria-expanded={mobileMoreOpen}
-                onClick={() => setMobileMoreOpen((prev) => !prev)}
-              >
-                <MoreHorizontal className="menuMain__icono" aria-hidden="true" />
-                <span className="menuMain__txt">Más</span>
-              </button>
-            </li>
           </ul>
-
-          <div
-            className={`menuMovil ${mobileMoreOpen ? "menuMovil--abierto" : "menuMovil--colapsado"}`}
-            id="menuMovil"
-          >
-            <button
-              type="button"
-              className="menuMovil__gatilloTop"
-              id="menuMovil__gatilloTop"
-              onClick={() => setMobileMoreOpen(false)}
-            >
-              <span className="oculto">Cerrar</span>
-              <X className="ico--blanco--24" aria-hidden="true" />
-            </button>
-
-            <hr className="hr my--10" />
-            <div className="menuMovil__tit">Cuenta</div>
-            <ul className="menuMovil__list">
-              <li className="menuMovil__item">
-                <button className="menuMovil__link" onClick={handleSignOut}>
-                  <LogOut className="ico--blanco--24" aria-hidden="true" />
-                  <span className="menuMain__txt">Cerrar sesión</span>
-                </button>
-              </li>
-            </ul>
-          </div>
         </nav>
 
         <main className="flex-1 min-h-0 overflow-auto bg-neutral-50">{children}</main>
