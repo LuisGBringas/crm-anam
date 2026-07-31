@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { Pagination } from "@/components/Pagination";
 import { TicketDetailDrawer } from "@/components/TicketDetailDrawer";
 import { TicketStatusBadge } from "@/components/StatusBadge";
 import { listTickets, type TicketFilters } from "@/lib/api";
@@ -13,6 +14,8 @@ import {
 } from "@/lib/status";
 import type { Ticket } from "@/lib/types";
 
+const PAGE_SIZE = 50;
+
 export default function TicketsPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +23,7 @@ export default function TicketsPage() {
   const [filters, setFilters] = useState<TicketFilters>({});
   const [searchInput, setSearchInput] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const load = useCallback(async (nextFilters: TicketFilters) => {
     setLoading(true);
@@ -35,6 +39,7 @@ export default function TicketsPage() {
 
   useEffect(() => {
     load(filters);
+    setPage(1);
   }, [filters, load]);
 
   useEffect(() => {
@@ -44,14 +49,20 @@ export default function TicketsPage() {
     return () => clearTimeout(timeout);
   }, [searchInput]);
 
+  const pageCount = Math.max(1, Math.ceil(tickets.length / PAGE_SIZE));
+  const pageItems = useMemo(
+    () => tickets.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [tickets, page]
+  );
+
   return (
     <AppShell>
-      <div className="mx-auto max-w-6xl px-6 py-6">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-xl font-semibold text-primary">Tickets</h1>
           <Link
             href="/tickets/nuevo"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
           >
             + Nuevo ticket
           </Link>
@@ -100,8 +111,8 @@ export default function TicketsPage() {
           </p>
         )}
 
-        <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-md border border-slate-200 bg-white">
+          <table className="min-w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase text-neutral">
               <tr>
                 <th className="px-4 py-3">Sitio</th>
@@ -126,7 +137,7 @@ export default function TicketsPage() {
                   </td>
                 </tr>
               )}
-              {tickets.map((ticket) => (
+              {pageItems.map((ticket) => (
                 <tr
                   key={ticket.id}
                   onClick={() => setSelectedId(ticket.id)}
@@ -152,10 +163,13 @@ export default function TicketsPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-neutral">
-          {tickets.length} ticket{tickets.length === 1 ? "" : "s"} encontrado
-          {tickets.length === 1 ? "" : "s"}.
-        </p>
+        <Pagination
+          page={page}
+          pageCount={pageCount}
+          totalItems={tickets.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+        />
       </div>
 
       {selectedId && (

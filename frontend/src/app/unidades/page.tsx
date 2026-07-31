@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { Pagination } from "@/components/Pagination";
 import { UnitDetailDrawer } from "@/components/UnitDetailDrawer";
 import { StatusBadge } from "@/components/StatusBadge";
 import { listUnits, type UnitFilters } from "@/lib/api";
 import { STATUS_LABELS, STATUS_LIST, UNIT_TYPE_LABELS } from "@/lib/status";
 import type { Unit } from "@/lib/types";
+
+const PAGE_SIZE = 50;
 
 export default function UnidadesPage() {
   const [units, setUnits] = useState<Unit[]>([]);
@@ -16,6 +19,7 @@ export default function UnidadesPage() {
   const [filters, setFilters] = useState<UnitFilters>({});
   const [searchInput, setSearchInput] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const load = useCallback(async (nextFilters: UnitFilters) => {
     setLoading(true);
@@ -31,6 +35,7 @@ export default function UnidadesPage() {
 
   useEffect(() => {
     load(filters);
+    setPage(1);
   }, [filters, load]);
 
   useEffect(() => {
@@ -40,16 +45,22 @@ export default function UnidadesPage() {
     return () => clearTimeout(timeout);
   }, [searchInput]);
 
+  const pageCount = Math.max(1, Math.ceil(units.length / PAGE_SIZE));
+  const pageItems = useMemo(
+    () => units.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [units, page]
+  );
+
   return (
     <AppShell>
-      <div className="mx-auto max-w-6xl px-6 py-6">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-xl font-semibold text-primary">
             Lista de unidades
           </h1>
           <Link
             href="/unidades/nueva"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
           >
             + Nueva unidad
           </Link>
@@ -98,14 +109,14 @@ export default function UnidadesPage() {
           </p>
         )}
 
-        <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-md border border-slate-200 bg-white">
+          <table className="min-w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase text-neutral">
               <tr>
                 <th className="px-4 py-3">Nombre</th>
                 <th className="px-4 py-3">Tipo</th>
                 <th className="px-4 py-3">Categoría</th>
-                <th className="px-4 py-3">Estado</th>
+                <th className="px-4 py-3">Sitio</th>
                 <th className="px-4 py-3">Estatus</th>
               </tr>
             </thead>
@@ -124,7 +135,7 @@ export default function UnidadesPage() {
                   </td>
                 </tr>
               )}
-              {units.map((unit) => (
+              {pageItems.map((unit) => (
                 <tr
                   key={unit.id}
                   onClick={() => setSelectedId(unit.id)}
@@ -140,7 +151,7 @@ export default function UnidadesPage() {
                     {unit.category || "—"}
                   </td>
                   <td className="px-4 py-3 text-neutral">
-                    {unit.state || "—"}
+                    {unit.site_name || "—"}
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={unit.status} />
@@ -150,10 +161,13 @@ export default function UnidadesPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-2 text-xs text-neutral">
-          {units.length} unidad{units.length === 1 ? "" : "es"} encontrada
-          {units.length === 1 ? "" : "s"}.
-        </p>
+        <Pagination
+          page={page}
+          pageCount={pageCount}
+          totalItems={units.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+        />
       </div>
 
       {selectedId && (

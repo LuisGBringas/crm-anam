@@ -160,17 +160,17 @@ export function UnitDetailPanel({
         <dd>{unit.capacity_label || (unit.capacity_mw ? `${unit.capacity_mw} MW` : "—")}</dd>
         <dt className="text-neutral">Ubicación en sitio</dt>
         <dd>{unit.rack_location || "—"}</dd>
-        <dt className="text-neutral">Operador</dt>
-        <dd>{unit.operator || "—"}</dd>
         <dt className="text-neutral">Iniciativa</dt>
         <dd>{unit.iniciativa || "—"}</dd>
         <dt className="text-neutral">Responsable</dt>
         <dd>{unit.responsable_administracion || "—"}</dd>
-        <dt className="text-neutral">Criticidad</dt>
-        <dd>{unit.criticidad || "—"}</dd>
-        <dt className="text-neutral">Estado</dt>
-        <dd>{unit.state || "—"}</dd>
-        <dt className="text-neutral">Dirección</dt>
+        {unit.criticidad && (
+          <>
+            <dt className="text-neutral">Criticidad</dt>
+            <dd>{unit.criticidad}</dd>
+          </>
+        )}
+        <dt className="text-neutral">Ciudad</dt>
         <dd>{unit.address || "—"}</dd>
         <dt className="text-neutral">Ubicación (mapa)</dt>
         <dd>
