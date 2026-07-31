@@ -36,7 +36,7 @@ export default function MapaPage() {
 
   return (
     <AppShell>
-      <div className="relative h-[calc(100vh-104px)] w-full">
+      <div className="relative h-full min-h-[520px] w-full">
         {loading && (
           <div className="absolute inset-x-0 top-0 z-[1000] bg-white/90 px-4 py-2 text-center text-sm text-neutral">
             Cargando unidades…

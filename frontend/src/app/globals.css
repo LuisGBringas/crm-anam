@@ -12,6 +12,487 @@ body {
   background-color: #f5f5f5;
 }
 
+.snd-layout {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.snd-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.snd-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.snd-institutional .snd-ir-content {
+  position: absolute;
+  left: -9999px;
+}
+
+.snd-institutional .snd-ir-content:focus {
+  left: 1rem;
+  top: 0.5rem;
+  z-index: 1000;
+  background: #fff;
+  color: #611232;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.snd-institutional .snd-mexico {
+  background: #611232;
+  color: #fff;
+}
+
+.snd-institutional .snd-mexico-contenedor {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.snd-institutional .snd-mexico-img {
+  width: 180px;
+  max-width: 100%;
+  height: auto;
+}
+
+.snd-institutional .snd-mexico-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.snd-institutional .snd-mexico-actions {
+  display: flex;
+  align-items: center;
+}
+
+.snd-institutional .snd-mexico-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.snd-institutional .snd-mexico-links a:hover {
+  text-decoration: underline;
+}
+
+.snd-institutional .snd-mexico-mobile-menu {
+  display: none;
+}
+
+.snd-institutional .snd-mexico-mobile-menu summary {
+  list-style: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.snd-institutional .snd-mexico-mobile-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.snd-institutional .snd-mexico-mobile-links {
+  position: absolute;
+  right: 1rem;
+  margin-top: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 0.4rem;
+  min-width: 170px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 20%);
+  z-index: 20;
+}
+
+.snd-institutional .snd-mexico-mobile-links a {
+  color: #611232;
+  text-decoration: none;
+  font-size: 0.88rem;
+  padding: 0.65rem 0.8rem;
+}
+
+.snd-institutional .snd-mexico-mobile-links a:hover {
+  background: #f5f5f5;
+}
+
+.snd-institutional .snd-navbar {
+  background: #13322b;
+}
+
+.snd-institutional .snd-navbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 52px;
+  gap: 1rem;
+}
+
+.snd-institutional .snd-navbar-brand {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.snd-institutional .snd-navbar-items {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.snd-institutional .snd-navbar-item {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.4rem;
+}
+
+.snd-institutional .snd-navbar-item:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.snd-institutional .snd-footer {
+  background: #611232;
+  color: #fff;
+}
+
+.snd-institutional .snd-footer--lite .snd-footer-lite-content {
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.snd-institutional .snd-footer--lite p,
+.snd-institutional .snd-footer--lite a {
+  font-size: 0.82rem;
+  color: #fff;
+  margin: 0;
+}
+
+.snd-institutional .snd-pleca {
+  height: 40px;
+  background-image: url("https://framework-gb.cdn.gob.mx/gobmx/img/pleca.svg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Sidebar SND-style, namespaced to app shell */
+.snd-app-shell .menuMain {
+  width: 256px;
+  background: linear-gradient(180deg, #7a203f 0%, #611232 100%);
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 6px rgb(0 0 0 / 25%);
+}
+
+.snd-app-shell .menuMain__gatillo {
+  position: absolute;
+  right: -16px;
+  top: 68px;
+  width: 16px;
+  height: 64px;
+  border: none;
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+  background: #7a203f;
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.snd-app-shell .menuMain__gatilloIco {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.snd-app-shell .menuMain__gatilloIco.is-collapsed {
+  transform: rotate(180deg);
+}
+
+.snd-app-shell .menuMain__header {
+  padding: 16px;
+}
+
+.snd-app-shell .menuMain__headerCont {
+  min-height: 48px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 12%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.snd-app-shell .menuMain__headerCont img {
+  width: 22px;
+  height: 22px;
+}
+
+.snd-app-shell .menuMain__headerTxt {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.snd-app-shell .menuMain__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.snd-app-shell .menuMain__link {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.snd-app-shell .menuMain__link:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.snd-app-shell .menuMain__link[aria-current="page"] {
+  background: #a57f2c;
+  color: #fff;
+}
+
+.snd-app-shell .menuMain__icono {
+  width: 18px;
+  height: 18px;
+}
+
+.snd-app-shell .menuMain--collapsed {
+  width: 80px;
+}
+
+.snd-app-shell .menuMain--collapsed .menuMain__txt,
+.snd-app-shell .menuMain--collapsed .menuMain__headerTxt {
+  display: none;
+}
+
+.snd-app-shell .menuMain--collapsed .menuMain__link {
+  justify-content: center;
+}
+
+.snd-app-shell .menuMain--collapsed .menuMain__headerCont {
+  justify-content: center;
+}
+
+.snd-app-shell .menuMain__item--mas {
+  display: none;
+}
+
+.snd-app-shell .menuMovil {
+  display: none;
+}
+
+.snd-app-shell .oculto {
+  position: absolute;
+  left: -9999px;
+}
+
+.snd-app-shell .hr {
+  border: none;
+  border-top: 1px solid rgb(255 255 255 / 25%);
+}
+
+.snd-app-shell .my--10 {
+  margin: 10px 0;
+}
+
+@media (max-width: 767.9px) {
+  .snd-app-shell {
+    padding-bottom: 66px;
+  }
+
+  .snd-app-shell .menuMain {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 30;
+    box-shadow: 0 -4px 8px rgb(0 0 0 / 25%);
+  }
+
+  .snd-app-shell .menuMain__gatillo,
+  .snd-app-shell .menuMain__header {
+    display: none;
+  }
+
+  .snd-app-shell .menuMain__lista {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .snd-app-shell .menuMain__link {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-height: 48px;
+    font-size: 0.72rem;
+    padding: 6px 8px;
+    width: auto;
+  }
+
+  .snd-app-shell .menuMain__item--mas {
+    display: block;
+  }
+
+  .snd-app-shell .menuMovil {
+    display: block;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: min(85vw, 320px);
+    background: linear-gradient(180deg, #7a203f 0%, #611232 100%);
+    color: #fff;
+    padding: 14px 14px 18px;
+    transform: translateX(100%);
+    transition: transform 0.2s ease;
+    z-index: 40;
+    overflow-y: auto;
+  }
+
+  .snd-app-shell .menuMovil--abierto {
+    transform: translateX(0);
+  }
+
+  .snd-app-shell .menuMovil__gatilloTop {
+    border: 0;
+    background: transparent;
+    color: #fff;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .snd-app-shell .menuMovil__gatilloTop img,
+  .snd-app-shell .ico--blanco--24 {
+    width: 22px;
+    height: 22px;
+  }
+
+  .snd-app-shell .menuMovil__tit {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .snd-app-shell .menuMovil__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .snd-app-shell .menuMovil__link {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    min-height: 40px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .snd-app-shell .menuMovil__link:hover {
+    background: rgb(255 255 255 / 14%);
+  }
+}
+
+@media (max-width: 640px) {
+  .snd-institutional .snd-mexico-contenedor {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .snd-institutional .snd-mexico-links {
+    display: none;
+  }
+
+  .snd-institutional .snd-mexico-mobile-menu {
+    display: block;
+    position: relative;
+  }
+
+  .snd-institutional .snd-navbar-brand {
+    font-size: 0.85rem;
+  }
+
+  .snd-institutional .snd-navbar-items {
+    width: 100%;
+    justify-content: flex-end;
+    overflow-x: auto;
+  }
+
+  .snd-institutional .snd-navbar-item {
+    white-space: nowrap;
+    font-size: 0.82rem;
+  }
+
+  .snd-institutional .snd-navbar-inner {
+    min-height: 46px;
+  }
+
+  .snd-institutional .snd-footer--lite .snd-footer-lite-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 .leaflet-container {
   width: 100%;
   height: 100%;
