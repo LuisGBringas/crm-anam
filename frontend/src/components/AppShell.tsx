@@ -46,8 +46,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-1 min-h-0 flex-col">
-      <header className="border-b border-slate-200 bg-white px-4 py-2.5 sm:px-6">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <header className="border-b border-slate-200 bg-white px-4 py-2 sm:px-6 sm:py-2.5">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <Image
               src="/logo-anam.png"
@@ -65,8 +65,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="hidden truncate text-xs text-slate-500 sm:inline sm:text-sm">
+          <div className="hidden items-center gap-3 sm:flex">
+            <span className="truncate text-xs text-slate-500 sm:text-sm">
               {session.user.email}
             </span>
             <button

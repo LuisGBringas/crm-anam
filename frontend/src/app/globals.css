@@ -105,20 +105,23 @@ body {
 .snd-institutional .snd-mexico-trigger {
   display: none;
   align-items: center;
-  gap: 0.5rem;
-  border: 1px solid rgb(255 255 255 / 30%);
-  background: rgb(255 255 255 / 10%);
-  color: #fff;
-  padding: 0.5rem 0.75rem;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  background: transparent;
+  color: #d4af37;
   border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 700;
   cursor: pointer;
 }
 
+.snd-institutional .snd-mexico-trigger:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
 .snd-institutional .snd-mexico-trigger svg {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
   stroke-width: 2;
   fill: none;
@@ -434,16 +437,13 @@ body {
 
 @media (max-width: 640px) {
   .snd-institutional .snd-mexico-contenedor {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    min-height: 52px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
-  .snd-institutional .snd-mexico-actions {
-    width: 100%;
-    justify-content: space-between;
+  .snd-institutional .snd-mexico-img {
+    width: 140px;
   }
 
   .snd-institutional .snd-mexico-links {

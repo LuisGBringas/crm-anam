@@ -1,9 +1,19 @@
 "use client";
 
+import { LogOut, Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "./AuthProvider";
 
 export function InstitutionalShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { session, signOut } = useAuth();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    await signOut();
+    router.replace("/login");
+  }
 
   return (
     <div className="snd-layout snd-institutional">
@@ -40,17 +50,26 @@ export function InstitutionalShell({ children }: { children: React.ReactNode }) 
                 </a>
               </div>
 
+              {session && (
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  aria-label="Cerrar sesión"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 transition hover:bg-white/10 hover:text-white sm:hidden"
+                >
+                  <LogOut className="h-5 w-5" aria-hidden="true" />
+                </button>
+              )}
+
               <button
                 type="button"
                 className="snd-mexico-trigger"
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-institutional-menu"
+                aria-label="Abrir menú institucional"
                 onClick={() => setMobileMenuOpen((value) => !value)}
               >
-                <span>Menú</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M4 7h16M4 12h16M4 17h16" />
-                </svg>
+                <Menu aria-hidden="true" />
               </button>
             </div>
           </div>
