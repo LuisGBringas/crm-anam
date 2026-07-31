@@ -88,8 +88,11 @@ unitsRouter.post("/", async (req, res) => {
   if (!isUnitType(body.unit_type)) {
     return res.status(400).json({ error: "unit_type debe ser 'energia' o 'auxiliar'." });
   }
-  if (typeof body.latitude !== "number" || typeof body.longitude !== "number") {
-    return res.status(400).json({ error: "latitude y longitude son obligatorios y numéricos." });
+  if (
+    (body.latitude !== undefined && body.latitude !== null && typeof body.latitude !== "number") ||
+    (body.longitude !== undefined && body.longitude !== null && typeof body.longitude !== "number")
+  ) {
+    return res.status(400).json({ error: "latitude y longitude deben ser numéricos si se proporcionan." });
   }
 
   const status: UnitStatus = isUnitStatus(body.status) ? body.status : "correcto";
@@ -103,12 +106,25 @@ unitsRouter.post("/", async (req, res) => {
       operator: body.operator ?? null,
       capacity_mw: body.capacity_mw ?? null,
       status,
-      latitude: body.latitude,
-      longitude: body.longitude,
+      latitude: body.latitude ?? null,
+      longitude: body.longitude ?? null,
       address: body.address ?? null,
       state: body.state ?? null,
-      source: "manual",
+      source: body.source === "cosisi" ? "cosisi" : "manual",
+      external_ref: body.external_ref ?? null,
       notes: body.notes ?? null,
+      vpn_code: body.vpn_code ?? null,
+      site_name: body.site_name ?? null,
+      hostname: body.hostname ?? null,
+      marca: body.marca ?? null,
+      modelo: body.modelo ?? null,
+      numero_serie: body.numero_serie ?? null,
+      capacity_label: body.capacity_label ?? null,
+      rack_location: body.rack_location ?? null,
+      iniciativa: body.iniciativa ?? null,
+      responsable_administracion: body.responsable_administracion ?? null,
+      criticidad: body.criticidad ?? null,
+      es_virtual: body.es_virtual ?? null,
     })
     .select("*")
     .single();
@@ -140,6 +156,18 @@ unitsRouter.patch("/:id", async (req, res) => {
     "address",
     "state",
     "notes",
+    "vpn_code",
+    "site_name",
+    "hostname",
+    "marca",
+    "modelo",
+    "numero_serie",
+    "capacity_label",
+    "rack_location",
+    "iniciativa",
+    "responsable_administracion",
+    "criticidad",
+    "es_virtual",
   ] as const;
 
   const updates: Record<string, unknown> = {};

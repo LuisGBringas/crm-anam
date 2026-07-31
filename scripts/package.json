@@ -4,11 +4,14 @@
   "private": true,
   "description": "Scripts de mantenimiento del CRM ANAM (siembra de datos reales).",
   "scripts": {
-    "import-osm": "tsx import-osm.ts"
+    "import-osm": "tsx import-osm.ts",
+    "import-cosisi": "tsx import-cosisi.ts",
+    "import-erni-fallas": "tsx import-erni-fallas.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",

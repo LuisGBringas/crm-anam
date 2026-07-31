@@ -9,6 +9,12 @@ import type { Unit } from "@/lib/types";
 
 const MEXICO_CENTER: [number, number] = [23.6345, -102.5528];
 
+type GeocodedUnit = Unit & { latitude: number; longitude: number };
+
+function hasCoordinates(unit: Unit): unit is GeocodedUnit {
+  return unit.latitude != null && unit.longitude != null;
+}
+
 function statusIcon(unit: Unit) {
   const color = STATUS_COLORS[unit.status];
   const shape = unit.unit_type === "energia" ? "50%" : "4px";
@@ -48,7 +54,7 @@ export function MapView({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MarkerClusterGroup chunkedLoading>
-        {units.map((unit) => (
+        {units.filter(hasCoordinates).map((unit) => (
           <Marker
             key={unit.id}
             position={[unit.latitude, unit.longitude]}

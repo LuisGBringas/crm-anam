@@ -9,6 +9,8 @@ const NAV_ITEMS = [
   { href: "/mapa", label: "Mapa" },
   { href: "/unidades", label: "Lista de unidades" },
   { href: "/unidades/nueva", label: "Nueva unidad" },
+  { href: "/tickets", label: "Tickets" },
+  { href: "/tickets/nuevo", label: "Nuevo ticket" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -93,8 +95,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <footer className="border-t border-slate-200 bg-white px-6 py-2 text-center text-[11px] text-neutral">
-        Datos de unidades de energía: © OpenStreetMap contributors (ODbL),
-        vía Overpass API / OpenInfraMap.
+        Inventario de unidades: COSISI. Ubicaciones aproximadas por
+        aduana/sitio (© OpenStreetMap contributors, ODbL, vía Nominatim).
       </footer>
     </div>
   );

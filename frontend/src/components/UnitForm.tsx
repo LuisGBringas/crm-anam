@@ -5,6 +5,9 @@ import { UNIT_TYPE_LABELS } from "@/lib/status";
 import type { UnitFormInput, UnitType } from "@/lib/types";
 
 const CATEGORY_OPTIONS = [
+  "ups",
+  "planta_emergencia",
+  "aire_acondicionado",
   "solar",
   "eolica",
   "hidroelectrica",
@@ -35,11 +38,22 @@ export function UnitForm({
     category: initialValue?.category ?? "",
     operator: initialValue?.operator ?? "",
     capacity_mw: initialValue?.capacity_mw ?? undefined,
-    latitude: initialValue?.latitude ?? 23.6345,
-    longitude: initialValue?.longitude ?? -102.5528,
+    latitude: initialValue?.latitude ?? undefined,
+    longitude: initialValue?.longitude ?? undefined,
     address: initialValue?.address ?? "",
     state: initialValue?.state ?? "",
     notes: initialValue?.notes ?? "",
+    vpn_code: initialValue?.vpn_code ?? "",
+    site_name: initialValue?.site_name ?? "",
+    hostname: initialValue?.hostname ?? "",
+    marca: initialValue?.marca ?? "",
+    modelo: initialValue?.modelo ?? "",
+    numero_serie: initialValue?.numero_serie ?? "",
+    capacity_label: initialValue?.capacity_label ?? "",
+    rack_location: initialValue?.rack_location ?? "",
+    iniciativa: initialValue?.iniciativa ?? "",
+    responsable_administracion: initialValue?.responsable_administracion ?? "",
+    criticidad: initialValue?.criticidad ?? "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,6 +125,64 @@ export function UnitForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div>
+          <label className={labelClass}>Sitio / Aduana</label>
+          <input
+            className={inputClass}
+            value={values.site_name}
+            onChange={(e) => update("site_name", e.target.value)}
+            placeholder='ej. "VPN 47 Aduana Agua Prieta - Sede"'
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Código VPN</label>
+          <input
+            className={inputClass}
+            value={values.vpn_code}
+            onChange={(e) => update("vpn_code", e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Marca</label>
+          <input
+            className={inputClass}
+            value={values.marca}
+            onChange={(e) => update("marca", e.target.value)}
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Modelo</label>
+          <input
+            className={inputClass}
+            value={values.modelo}
+            onChange={(e) => update("modelo", e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Número de serie</label>
+          <input
+            className={inputClass}
+            value={values.numero_serie}
+            onChange={(e) => update("numero_serie", e.target.value)}
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Hostname</label>
+          <input
+            className={inputClass}
+            value={values.hostname}
+            onChange={(e) => update("hostname", e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
           <label className={labelClass}>Operador</label>
           <input
             className={inputClass}
@@ -119,46 +191,88 @@ export function UnitForm({
           />
         </div>
         <div>
-          <label className={labelClass}>Capacidad (MW)</label>
+          <label className={labelClass}>Capacidad</label>
           <input
-            type="number"
-            step="0.01"
             className={inputClass}
-            value={values.capacity_mw ?? ""}
-            onChange={(e) =>
-              update(
-                "capacity_mw",
-                e.target.value === "" ? undefined : Number(e.target.value)
-              )
-            }
+            value={values.capacity_label}
+            onChange={(e) => update("capacity_label", e.target.value)}
+            placeholder='ej. "6 KVA", "3 TON", "220 KW"'
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className={labelClass}>Latitud *</label>
+          <label className={labelClass}>Ubicación en sitio (rack)</label>
           <input
-            required
-            type="number"
-            step="any"
             className={inputClass}
-            value={values.latitude}
-            onChange={(e) => update("latitude", Number(e.target.value))}
+            value={values.rack_location}
+            onChange={(e) => update("rack_location", e.target.value)}
+            placeholder="ej. MDF, IDF01"
           />
         </div>
         <div>
-          <label className={labelClass}>Longitud *</label>
+          <label className={labelClass}>Iniciativa</label>
           <input
-            required
-            type="number"
-            step="any"
             className={inputClass}
-            value={values.longitude}
-            onChange={(e) => update("longitude", Number(e.target.value))}
+            value={values.iniciativa}
+            onChange={(e) => update("iniciativa", e.target.value)}
+            placeholder="ej. VIDEO VIGILANCIA"
           />
         </div>
       </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Responsable de administración</label>
+          <input
+            className={inputClass}
+            value={values.responsable_administracion}
+            onChange={(e) => update("responsable_administracion", e.target.value)}
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Criticidad</label>
+          <input
+            className={inputClass}
+            value={values.criticidad}
+            onChange={(e) => update("criticidad", e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass}>Latitud</label>
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            value={values.latitude ?? ""}
+            onChange={(e) =>
+              update("latitude", e.target.value === "" ? null : Number(e.target.value))
+            }
+            placeholder="Sin geocodificar"
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Longitud</label>
+          <input
+            type="number"
+            step="any"
+            className={inputClass}
+            value={values.longitude ?? ""}
+            onChange={(e) =>
+              update("longitude", e.target.value === "" ? null : Number(e.target.value))
+            }
+            placeholder="Sin geocodificar"
+          />
+        </div>
+      </div>
+      <p className="-mt-2 text-xs text-neutral">
+        Si se deja vacío, la unidad no aparecerá en el mapa pero sí en la
+        lista.
+      </p>
 
       <div className="grid grid-cols-2 gap-3">
         <div>

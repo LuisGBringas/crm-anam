@@ -6,3 +6,7 @@ out
 .env
 .env.*
 !*.env.example
+
+# Datos fuente reales (números de serie, ubicaciones exactas) — nunca al repo
+*.xlsx
+scripts/.geocode-cache.json

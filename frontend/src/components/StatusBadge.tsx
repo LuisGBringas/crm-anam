@@ -1,8 +1,7 @@
-import { STATUS_COLORS, STATUS_LABELS } from "@/lib/status";
-import type { UnitStatus } from "@/lib/types";
+import { STATUS_COLORS, STATUS_LABELS, TICKET_STATUS_COLORS, TICKET_STATUS_LABELS } from "@/lib/status";
+import type { TicketStatus, UnitStatus } from "@/lib/types";
 
-export function StatusBadge({ status }: { status: UnitStatus }) {
-  const color = STATUS_COLORS[status];
+export function Badge({ label, color }: { label: string; color: string }) {
   return (
     <span
       className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
@@ -12,7 +11,15 @@ export function StatusBadge({ status }: { status: UnitStatus }) {
         className="h-1.5 w-1.5 rounded-full"
         style={{ backgroundColor: color }}
       />
-      {STATUS_LABELS[status]}
+      {label}
     </span>
   );
+}
+
+export function StatusBadge({ status }: { status: UnitStatus }) {
+  return <Badge label={STATUS_LABELS[status]} color={STATUS_COLORS[status]} />;
+}
+
+export function TicketStatusBadge({ status }: { status: TicketStatus }) {
+  return <Badge label={TICKET_STATUS_LABELS[status]} color={TICKET_STATUS_COLORS[status]} />;
 }

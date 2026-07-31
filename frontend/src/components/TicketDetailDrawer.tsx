@@ -1,13 +1,13 @@
 "use client";
 
-import { UnitDetailPanel } from "./UnitDetailPanel";
+import { TicketDetailPanel } from "./TicketDetailPanel";
 
-export function UnitDetailDrawer({
-  unitId,
+export function TicketDetailDrawer({
+  ticketId,
   onClose,
   onChanged,
 }: {
-  unitId: string;
+  ticketId: string;
   onClose: () => void;
   onChanged: () => void;
 }) {
@@ -22,7 +22,7 @@ export function UnitDetailDrawer({
       >
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
           <h2 className="text-base font-semibold text-primary">
-            Vista ampliada de la unidad
+            Vista ampliada del ticket
           </h2>
           <button
             onClick={onClose}
@@ -34,8 +34,8 @@ export function UnitDetailDrawer({
         </div>
 
         <div className="p-5">
-          <UnitDetailPanel
-            unitId={unitId}
+          <TicketDetailPanel
+            ticketId={ticketId}
             onChanged={onChanged}
             onDeleted={onClose}
           />

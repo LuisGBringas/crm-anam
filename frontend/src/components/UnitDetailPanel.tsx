@@ -1,17 +1,30 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   changeUnitStatus,
   deleteUnit,
   getUnit,
   getUnitHistory,
+  listTickets,
   updateUnit,
 } from "@/lib/api";
-import { STATUS_LABELS, STATUS_LIST, UNIT_TYPE_LABELS } from "@/lib/status";
-import type { StatusHistoryEntry, Unit, UnitStatus } from "@/lib/types";
-import { StatusBadge } from "./StatusBadge";
+import {
+  STATUS_LABELS,
+  STATUS_LIST,
+  TICKET_ORIGEN_LABELS,
+  UNIT_TYPE_LABELS,
+} from "@/lib/status";
+import type { StatusHistoryEntry, Ticket, Unit, UnitStatus } from "@/lib/types";
+import { StatusBadge, TicketStatusBadge } from "./StatusBadge";
 import { UnitForm } from "./UnitForm";
+
+const SOURCE_LABELS: Record<Unit["source"], string> = {
+  osm: "OpenStreetMap",
+  cosisi: "Inventario COSISI",
+  manual: "Manual",
+};
 
 export function UnitDetailPanel({
   unitId,
@@ -24,6 +37,7 @@ export function UnitDetailPanel({
 }) {
   const [unit, setUnit] = useState<Unit | null>(null);
   const [history, setHistory] = useState<StatusHistoryEntry[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,12 +46,14 @@ export function UnitDetailPanel({
   async function reload() {
     setLoading(true);
     try {
-      const [u, h] = await Promise.all([
+      const [u, h, t] = await Promise.all([
         getUnit(unitId),
         getUnitHistory(unitId),
+        listTickets({ unitId }),
       ]);
       setUnit(u);
       setHistory(h);
+      setTickets(t);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al cargar la unidad.");
     } finally {
@@ -91,6 +107,17 @@ export function UnitDetailPanel({
           address: unit.address ?? "",
           state: unit.state ?? "",
           notes: unit.notes ?? "",
+          vpn_code: unit.vpn_code ?? "",
+          site_name: unit.site_name ?? "",
+          hostname: unit.hostname ?? "",
+          marca: unit.marca ?? "",
+          modelo: unit.modelo ?? "",
+          numero_serie: unit.numero_serie ?? "",
+          capacity_label: unit.capacity_label ?? "",
+          rack_location: unit.rack_location ?? "",
+          iniciativa: unit.iniciativa ?? "",
+          responsable_administracion: unit.responsable_administracion ?? "",
+          criticidad: unit.criticidad ?? "",
         }}
         onCancel={() => setEditing(false)}
         onSubmit={async (values) => {
@@ -117,20 +144,42 @@ export function UnitDetailPanel({
       </div>
 
       <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+        <dt className="text-neutral">Sitio / Aduana</dt>
+        <dd>{unit.site_name || "—"}</dd>
+        <dt className="text-neutral">Código VPN</dt>
+        <dd>{unit.vpn_code || "—"}</dd>
+        <dt className="text-neutral">Marca / Modelo</dt>
+        <dd>
+          {[unit.marca, unit.modelo].filter(Boolean).join(" / ") || "—"}
+        </dd>
+        <dt className="text-neutral">Número de serie</dt>
+        <dd>{unit.numero_serie || "—"}</dd>
+        <dt className="text-neutral">Hostname</dt>
+        <dd>{unit.hostname || "—"}</dd>
+        <dt className="text-neutral">Capacidad</dt>
+        <dd>{unit.capacity_label || (unit.capacity_mw ? `${unit.capacity_mw} MW` : "—")}</dd>
+        <dt className="text-neutral">Ubicación en sitio</dt>
+        <dd>{unit.rack_location || "—"}</dd>
         <dt className="text-neutral">Operador</dt>
         <dd>{unit.operator || "—"}</dd>
-        <dt className="text-neutral">Capacidad</dt>
-        <dd>{unit.capacity_mw ? `${unit.capacity_mw} MW` : "—"}</dd>
+        <dt className="text-neutral">Iniciativa</dt>
+        <dd>{unit.iniciativa || "—"}</dd>
+        <dt className="text-neutral">Responsable</dt>
+        <dd>{unit.responsable_administracion || "—"}</dd>
+        <dt className="text-neutral">Criticidad</dt>
+        <dd>{unit.criticidad || "—"}</dd>
         <dt className="text-neutral">Estado</dt>
         <dd>{unit.state || "—"}</dd>
         <dt className="text-neutral">Dirección</dt>
         <dd>{unit.address || "—"}</dd>
-        <dt className="text-neutral">Ubicación</dt>
+        <dt className="text-neutral">Ubicación (mapa)</dt>
         <dd>
-          {unit.latitude.toFixed(4)}, {unit.longitude.toFixed(4)}
+          {unit.latitude != null && unit.longitude != null
+            ? `${unit.latitude.toFixed(4)}, ${unit.longitude.toFixed(4)}`
+            : "Sin geocodificar"}
         </dd>
         <dt className="text-neutral">Fuente</dt>
-        <dd>{unit.source === "osm" ? "OpenStreetMap" : "Manual"}</dd>
+        <dd>{SOURCE_LABELS[unit.source]}</dd>
       </dl>
 
       {unit.notes && (
@@ -176,6 +225,38 @@ export function UnitDetailPanel({
         >
           Eliminar
         </button>
+      </div>
+
+      <div>
+        <h4 className="mb-2 text-sm font-semibold text-slate-700">
+          Tickets relacionados
+        </h4>
+        <ul className="flex flex-col gap-2">
+          {tickets.length === 0 && (
+            <li className="text-sm text-neutral">Sin tickets relacionados.</li>
+          )}
+          {tickets.map((ticket) => (
+            <li key={ticket.id}>
+              <Link
+                href={`/tickets/${ticket.id}`}
+                className="flex items-center justify-between rounded-md border border-slate-200 p-2 text-xs hover:bg-slate-50"
+              >
+                <span>
+                  <span className="font-medium text-slate-700">
+                    {ticket.ticket_number || TICKET_ORIGEN_LABELS[ticket.origen]}
+                  </span>
+                  {ticket.problema && (
+                    <span className="block text-neutral">
+                      {ticket.problema.slice(0, 80)}
+                      {ticket.problema.length > 80 ? "…" : ""}
+                    </span>
+                  )}
+                </span>
+                <TicketStatusBadge status={ticket.estatus} />
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div>

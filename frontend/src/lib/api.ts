@@ -3,6 +3,10 @@
 import { supabase } from "./supabaseClient";
 import type {
   StatusHistoryEntry,
+  Ticket,
+  TicketFormInput,
+  TicketStatus,
+  TicketStatusHistoryEntry,
   Unit,
   UnitFormInput,
   UnitStatus,
@@ -107,4 +111,74 @@ export async function changeUnitStatus(
 
 export async function deleteUnit(id: string): Promise<void> {
   await request<void>(`/api/units/${id}`, { method: "DELETE" });
+}
+
+export interface TicketFilters {
+  origen?: string;
+  estatus?: string;
+  search?: string;
+  unitId?: string;
+}
+
+export async function listTickets(filters: TicketFilters = {}): Promise<Ticket[]> {
+  const params = new URLSearchParams();
+  if (filters.origen) params.set("origen", filters.origen);
+  if (filters.estatus) params.set("estatus", filters.estatus);
+  if (filters.search) params.set("search", filters.search);
+  if (filters.unitId) params.set("unit_id", filters.unitId);
+
+  const query = params.toString();
+  const { data } = await request<{ data: Ticket[] }>(
+    `/api/tickets${query ? `?${query}` : ""}`
+  );
+  return data;
+}
+
+export async function getTicket(id: string): Promise<Ticket> {
+  const { data } = await request<{ data: Ticket }>(`/api/tickets/${id}`);
+  return data;
+}
+
+export async function getTicketHistory(
+  id: string
+): Promise<TicketStatusHistoryEntry[]> {
+  const { data } = await request<{ data: TicketStatusHistoryEntry[] }>(
+    `/api/tickets/${id}/history`
+  );
+  return data;
+}
+
+export async function createTicket(input: TicketFormInput): Promise<Ticket> {
+  const { data } = await request<{ data: Ticket }>(`/api/tickets`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+  return data;
+}
+
+export async function updateTicket(
+  id: string,
+  input: Partial<TicketFormInput>
+): Promise<Ticket> {
+  const { data } = await request<{ data: Ticket }>(`/api/tickets/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+  return data;
+}
+
+export async function changeTicketStatus(
+  id: string,
+  estatus: TicketStatus,
+  note?: string
+): Promise<Ticket> {
+  const { data } = await request<{ data: Ticket }>(`/api/tickets/${id}/status`, {
+    method: "POST",
+    body: JSON.stringify({ estatus, note }),
+  });
+  return data;
+}
+
+export async function deleteTicket(id: string): Promise<void> {
+  await request<void>(`/api/tickets/${id}`, { method: "DELETE" });
 }
