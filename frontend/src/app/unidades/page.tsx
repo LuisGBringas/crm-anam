@@ -1,5 +1,6 @@
 "use client";
 
+import { FileDown } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
@@ -20,6 +21,7 @@ export default function UnidadesPage() {
   const [searchInput, setSearchInput] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [downloadingReport, setDownloadingReport] = useState(false);
 
   const load = useCallback(async (nextFilters: UnitFilters) => {
     setLoading(true);
@@ -51,6 +53,30 @@ export default function UnidadesPage() {
     [units, page]
   );
 
+  const filterDescription = useMemo(() => {
+    const parts: string[] = [];
+    if (filters.type) parts.push(UNIT_TYPE_LABELS[filters.type as keyof typeof UNIT_TYPE_LABELS] ?? filters.type);
+    if (filters.status) parts.push(STATUS_LABELS[filters.status as keyof typeof STATUS_LABELS] ?? filters.status);
+    if (filters.search) parts.push(`búsqueda "${filters.search}"`);
+    return parts.join(" · ");
+  }, [filters]);
+
+  async function handleDownloadReport() {
+    setDownloadingReport(true);
+    try {
+      const [{ downloadPdf }, { UnitsReportDocument }] = await Promise.all([
+        import("@/lib/pdf/download"),
+        import("@/lib/pdf/UnitsReportDocument"),
+      ]);
+      await downloadPdf(
+        <UnitsReportDocument units={units} filterDescription={filterDescription} />,
+        "informe-unidades.pdf"
+      );
+    } finally {
+      setDownloadingReport(false);
+    }
+  }
+
   return (
     <AppShell>
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
@@ -58,12 +84,22 @@ export default function UnidadesPage() {
           <h1 className="text-xl font-semibold text-primary">
             Lista de unidades
           </h1>
-          <Link
-            href="/unidades/nueva"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
-          >
-            + Nueva unidad
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={handleDownloadReport}
+              disabled={downloadingReport || units.length === 0}
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <FileDown className="h-4 w-4" />
+              {downloadingReport ? "Generando…" : "Descargar informe PDF"}
+            </button>
+            <Link
+              href="/unidades/nueva"
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
+            >
+              + Nueva unidad
+            </Link>
+          </div>
         </div>
 
         <div className="mb-4 flex flex-wrap gap-3 rounded-md border border-slate-200 bg-white p-4">

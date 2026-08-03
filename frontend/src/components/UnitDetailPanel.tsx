@@ -1,5 +1,6 @@
 "use client";
 
+import { FileDown } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -42,6 +43,7 @@ export function UnitDetailPanel({
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [statusNote, setStatusNote] = useState("");
+  const [downloadingReport, setDownloadingReport] = useState(false);
 
   async function reload() {
     setLoading(true);
@@ -72,6 +74,23 @@ export function UnitDetailPanel({
     setStatusNote("");
     await reload();
     onChanged();
+  }
+
+  async function handleDownloadReport() {
+    if (!unit) return;
+    setDownloadingReport(true);
+    try {
+      const [{ downloadPdf }, { UnitRecordDocument }] = await Promise.all([
+        import("@/lib/pdf/download"),
+        import("@/lib/pdf/UnitRecordDocument"),
+      ]);
+      await downloadPdf(
+        <UnitRecordDocument unit={unit} history={history} relatedTickets={tickets} />,
+        `informe-unidad-${unit.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.pdf`
+      );
+    } finally {
+      setDownloadingReport(false);
+    }
   }
 
   async function handleDelete() {
@@ -226,6 +245,15 @@ export function UnitDetailPanel({
           Eliminar
         </button>
       </div>
+
+      <button
+        onClick={handleDownloadReport}
+        disabled={downloadingReport}
+        className="inline-flex items-center justify-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <FileDown className="h-4 w-4" />
+        {downloadingReport ? "Generando informe…" : "Descargar informe PDF"}
+      </button>
 
       <div>
         <h4 className="mb-2 text-sm font-semibold text-slate-700">

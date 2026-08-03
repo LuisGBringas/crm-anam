@@ -1,5 +1,6 @@
 "use client";
 
+import { FileDown } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
@@ -24,6 +25,7 @@ export default function TicketsPage() {
   const [searchInput, setSearchInput] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [downloadingReport, setDownloadingReport] = useState(false);
 
   const load = useCallback(async (nextFilters: TicketFilters) => {
     setLoading(true);
@@ -55,17 +57,53 @@ export default function TicketsPage() {
     [tickets, page]
   );
 
+  const filterDescription = useMemo(() => {
+    const parts: string[] = [];
+    if (filters.origen)
+      parts.push(TICKET_ORIGEN_LABELS[filters.origen as keyof typeof TICKET_ORIGEN_LABELS] ?? filters.origen);
+    if (filters.estatus)
+      parts.push(TICKET_STATUS_LABELS[filters.estatus as keyof typeof TICKET_STATUS_LABELS] ?? filters.estatus);
+    if (filters.search) parts.push(`búsqueda "${filters.search}"`);
+    return parts.join(" · ");
+  }, [filters]);
+
+  async function handleDownloadReport() {
+    setDownloadingReport(true);
+    try {
+      const [{ downloadPdf }, { TicketsReportDocument }] = await Promise.all([
+        import("@/lib/pdf/download"),
+        import("@/lib/pdf/TicketsReportDocument"),
+      ]);
+      await downloadPdf(
+        <TicketsReportDocument tickets={tickets} filterDescription={filterDescription} />,
+        "informe-tickets.pdf"
+      );
+    } finally {
+      setDownloadingReport(false);
+    }
+  }
+
   return (
     <AppShell>
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-xl font-semibold text-primary">Tickets</h1>
-          <Link
-            href="/tickets/nuevo"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
-          >
-            + Nuevo ticket
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={handleDownloadReport}
+              disabled={downloadingReport || tickets.length === 0}
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <FileDown className="h-4 w-4" />
+              {downloadingReport ? "Generando…" : "Descargar informe PDF"}
+            </button>
+            <Link
+              href="/tickets/nuevo"
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark"
+            >
+              + Nuevo ticket
+            </Link>
+          </div>
         </div>
 
         <div className="mb-4 flex flex-wrap gap-3 rounded-md border border-slate-200 bg-white p-4">
